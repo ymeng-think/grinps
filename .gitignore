@@ -1,6 +1,12 @@
+# Idea #
+.idea
+.DS_Store
+
+# Java Objects #
 *.class
 
 # Package Files #
 *.jar
 *.war
 *.ear
+
