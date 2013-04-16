@@ -3,11 +3,9 @@ package tw.grinps;
 import org.junit.Before;
 import org.junit.Test;
 import tw.grinps.container.DefaultContainer;
-import tw.sample.multimedia.ColonMovieFinder;
-import tw.sample.multimedia.MovieFinder;
-import tw.sample.multimedia.MusicFinder;
-import tw.sample.multimedia.XmlMusicFinder;
+import tw.sample.multimedia.*;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class DefaultContainerTest {
@@ -36,6 +34,16 @@ public class DefaultContainerTest {
         MovieFinder finder = container.getComponent(MovieFinder.class);
 
         assertTrue(finder instanceof ColonMovieFinder);
+    }
+
+    @Test
+    public void should_fetch_bean_that_injected_component() {
+        container.registerComponent(MovieFinder.class, ColonMovieFinder.class);
+        container.registerComponent(MovieLister.class);
+
+        MovieLister lister = container.getComponent(MovieLister.class);
+
+        assertNotNull(lister);
     }
 
 }

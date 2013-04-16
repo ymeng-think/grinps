@@ -6,4 +6,5 @@ public interface Container {
 
     void registerComponent(Class<?> interfaceType, Class<?> instanceType);
 
+    void registerComponent(Class<?> instanceType);
 }
