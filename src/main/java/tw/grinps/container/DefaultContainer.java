@@ -4,6 +4,7 @@ import tw.grinps.Container;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +24,34 @@ public class DefaultContainer implements Container {
 
     @Override
     public <T> T getComponent(Class<T> interfaceType) {
-        return (T)this.instancePool.get(interfaceType);
+        T instance = (T) this.instancePool.get(interfaceType);
+        injectSetter(instance);
+        return instance;
+    }
+
+    private <T> void injectSetter(T instance) {
+        Method[] methods = instance.getClass().getMethods();
+        for (Method method : methods) {
+            if (!isSetter(method)) {
+                continue;
+            }
+            injectSetter(instance, method);
+        }
+    }
+
+    private <T> void injectSetter(T instance, Method method) {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        try {
+            method.invoke(instance, getParameterValues(parameterTypes));
+        } catch (IllegalAccessException e) {
+            throw new CouldNotSetPropertyException();
+        } catch (InvocationTargetException e) {
+            throw new CouldNotSetPropertyException();
+        }
+    }
+
+    private boolean isSetter(Method method) {
+        return method.getName().startsWith("set");
     }
 
     private Object createInstance(Class<?> instanceType) {
@@ -55,7 +83,8 @@ public class DefaultContainer implements Container {
 
     private Object createInstance(Constructor<?> constructor) {
         try {
-            return constructor.newInstance(getConstructorParameterValues(constructor));
+            Class<?>[] parameterTypes = constructor.getParameterTypes();
+            return constructor.newInstance(getParameterValues(parameterTypes));
         } catch (InstantiationException e) {
             throw new CouldNotInitializeInstanceException();
         } catch (IllegalAccessException e) {
@@ -65,8 +94,7 @@ public class DefaultContainer implements Container {
         }
     }
 
-    private Object[] getConstructorParameterValues(Constructor<?> constructor) {
-        Class<?>[] parameterTypes = constructor.getParameterTypes();
+    private Object[] getParameterValues(Class<?>[] parameterTypes) {
         Object[] parameters = new Object[parameterTypes.length];
 
         for (int i = 0; i < parameterTypes.length; i++){

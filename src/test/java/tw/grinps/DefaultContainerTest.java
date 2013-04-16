@@ -37,13 +37,24 @@ public class DefaultContainerTest {
     }
 
     @Test
-    public void should_fetch_bean_that_injected_component() {
+    public void should_fetch_bean_that_injected_component_in_constructor() {
         container.registerComponent(MovieFinder.class, ColonMovieFinder.class);
         container.registerComponent(MovieLister.class);
 
         MovieLister lister = container.getComponent(MovieLister.class);
 
         assertNotNull(lister);
+    }
+
+    @Test
+    public void should_fetch_bean_that_injected_component_in_setter() {
+        container.registerComponent(MusicFinder.class, XmlMusicFinder.class);
+        container.registerComponent(MusicLister.class);
+
+        MusicLister lister = container.getComponent(MusicLister.class);
+
+        assertNotNull(lister);
+        assertNotNull(lister.getFinder());
     }
 
 }
