@@ -2,7 +2,6 @@ package tw.grinps.container;
 
 import tw.grinps.Container;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -14,7 +13,8 @@ public class DefaultContainer implements Container {
 
     @Override
     public void registerComponent(Class<?> interfaceType, Class<?> instanceType) {
-        this.instancePool.put(interfaceType, createInstance(instanceType));
+        InstanceGenerator instanceGenerator = new InstanceGenerator(this);
+        this.instancePool.put(interfaceType, instanceGenerator.generate(instanceType));
     }
 
     @Override
@@ -27,6 +27,11 @@ public class DefaultContainer implements Container {
         T instance = (T) this.instancePool.get(interfaceType);
         injectSetter(instance);
         return instance;
+    }
+
+    @Override
+    public boolean hasComponent(Class<?> interfaceType) {
+        return this.instancePool.containsKey(interfaceType);
     }
 
     private <T> void injectSetter(T instance) {
@@ -52,46 +57,6 @@ public class DefaultContainer implements Container {
 
     private boolean isSetter(Method method) {
         return method.getName().startsWith("set");
-    }
-
-    private Object createInstance(Class<?> instanceType) {
-        Constructor<?>[] constructors = instanceType.getConstructors();
-        for (Constructor<?> constructor : constructors) {
-            if (!canCreate(constructor)) {
-                continue;
-            }
-
-            return createInstance(constructor);
-        }
-
-        return null;
-    }
-
-    private boolean canCreate(Constructor<?> constructor) {
-        Class<?>[] parameterTypes = constructor.getParameterTypes();
-        for (Class<?> parameterType : parameterTypes) {
-            if (!hasComponent(parameterType)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean hasComponent(Class<?> interfaceType) {
-        return this.instancePool.containsKey(interfaceType);
-    }
-
-    private Object createInstance(Constructor<?> constructor) {
-        try {
-            Class<?>[] parameterTypes = constructor.getParameterTypes();
-            return constructor.newInstance(getParameterValues(parameterTypes));
-        } catch (InstantiationException e) {
-            throw new CouldNotInitializeInstanceException();
-        } catch (IllegalAccessException e) {
-            throw new CouldNotInitializeInstanceException();
-        } catch (InvocationTargetException e) {
-            throw new CouldNotInitializeInstanceException();
-        }
     }
 
     private Object[] getParameterValues(Class<?>[] parameterTypes) {
