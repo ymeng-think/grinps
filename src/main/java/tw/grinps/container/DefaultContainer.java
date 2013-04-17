@@ -2,8 +2,6 @@ package tw.grinps.container;
 
 import tw.grinps.Container;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +12,12 @@ public class DefaultContainer implements Container {
     @Override
     public void registerComponent(Class<?> interfaceType, Class<?> instanceType) {
         InstanceGenerator instanceGenerator = new InstanceGenerator(this);
-        this.instancePool.put(interfaceType, instanceGenerator.generate(instanceType));
+        Object instance = instanceGenerator.generate(instanceType);
+
+        SetterInjector injector = new SetterInjector(this);
+        injector.inject(instance);
+
+        this.instancePool.put(interfaceType, instance);
     }
 
     @Override
@@ -24,9 +27,7 @@ public class DefaultContainer implements Container {
 
     @Override
     public <T> T getComponent(Class<T> interfaceType) {
-        T instance = (T) this.instancePool.get(interfaceType);
-        injectSetter(instance);
-        return instance;
+        return (T) this.instancePool.get(interfaceType);
     }
 
     @Override
@@ -34,38 +35,4 @@ public class DefaultContainer implements Container {
         return this.instancePool.containsKey(interfaceType);
     }
 
-    private <T> void injectSetter(T instance) {
-        Method[] methods = instance.getClass().getMethods();
-        for (Method method : methods) {
-            if (!isSetter(method)) {
-                continue;
-            }
-            injectSetter(instance, method);
-        }
-    }
-
-    private <T> void injectSetter(T instance, Method method) {
-        Class<?>[] parameterTypes = method.getParameterTypes();
-        try {
-            method.invoke(instance, getParameterValues(parameterTypes));
-        } catch (IllegalAccessException e) {
-            throw new CouldNotSetPropertyException();
-        } catch (InvocationTargetException e) {
-            throw new CouldNotSetPropertyException();
-        }
-    }
-
-    private boolean isSetter(Method method) {
-        return method.getName().startsWith("set");
-    }
-
-    private Object[] getParameterValues(Class<?>[] parameterTypes) {
-        Object[] parameters = new Object[parameterTypes.length];
-
-        for (int i = 0; i < parameterTypes.length; i++){
-            parameters[i] = getComponent(parameterTypes[i]);
-        }
-
-        return parameters;
-    }
 }
