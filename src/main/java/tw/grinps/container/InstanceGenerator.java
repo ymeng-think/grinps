@@ -37,9 +37,12 @@ class InstanceGenerator {
     }
 
     private Object createInstance(Constructor<?> constructor) {
+        Class<?>[] parameterTypes = constructor.getParameterTypes();
+        ParameterValuesFetcher parameterValuesFetcher = new ParameterValuesFetcher(container);
+        Object[] parameterValues = parameterValuesFetcher.fetch(parameterTypes);
+
         try {
-            Class<?>[] parameterTypes = constructor.getParameterTypes();
-            return constructor.newInstance(getParameterValues(parameterTypes));
+            return constructor.newInstance(parameterValues);
         } catch (InstantiationException e) {
             throw new CouldNotInitializeInstanceException();
         } catch (IllegalAccessException e) {
@@ -49,13 +52,4 @@ class InstanceGenerator {
         }
     }
 
-    private Object[] getParameterValues(Class<?>[] parameterTypes) {
-        Object[] parameters = new Object[parameterTypes.length];
-
-        for (int i = 0; i < parameterTypes.length; i++){
-            parameters[i] = container.getComponent(parameterTypes[i]);
-        }
-
-        return parameters;
-    }
 }

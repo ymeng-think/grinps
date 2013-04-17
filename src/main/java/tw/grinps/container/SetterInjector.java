@@ -29,8 +29,11 @@ class SetterInjector {
 
     private <T> void injectSetter(T instance, Method method) {
         Class<?>[] parameterTypes = method.getParameterTypes();
+        ParameterValuesFetcher parameterValuesFetcher = new ParameterValuesFetcher(container);
+        Object[] parameterValues = parameterValuesFetcher.fetch(parameterTypes);
+
         try {
-            method.invoke(instance, getParameterValues(parameterTypes));
+            method.invoke(instance, parameterValues);
         } catch (IllegalAccessException e) {
             throw new CouldNotSetPropertyException();
         } catch (InvocationTargetException e) {
@@ -38,13 +41,4 @@ class SetterInjector {
         }
     }
 
-    private Object[] getParameterValues(Class<?>[] parameterTypes) {
-        Object[] parameters = new Object[parameterTypes.length];
-
-        for (int i = 0; i < parameterTypes.length; i++){
-            parameters[i] = container.getComponent(parameterTypes[i]);
-        }
-
-        return parameters;
-    }
 }
