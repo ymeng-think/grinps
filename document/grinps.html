@@ -20,5 +20,25 @@
             <li><a href="http://martinfowler.com/articles/injection.html">Inversion of Control Containers and the Dependency Injection pattern</a></li>
         </ul>
     </div>
+	<div>
+		<h3>Q & A</h3>
+		<ol>
+			<li>
+                <div><h4>Scoped Containers</h4></div>
+                <div>These hierarchies of container can be set up with parents and children refering to each other, or
+                    children referring to parents only, or parents referring to children only. This changes the way that
+                    things work considerably. If a child has its parent registered, then it can lean on it for component
+                    resolution (but not without). If a parent has its child registered asa child, then it can manage it
+                    (start, stop, dispose cascade into children).</div>
+                <div>Web frameworks that leverage scoped container typically construct a tree of containers. For example
+                    an application level container maintains components that can be shared across the application. The
+                    application container will have child containers to maintain session level components. These session
+                    level containers can resolve dependencies through their parent containers, but the application container
+                    will have no visibility into its children. Additionally these child container do not have visibility
+                    into their sibling containers. With this design, containers can easily be garbage collected at the end
+                    of their scope.</div>
+            </li>
+		</ol>
+	</div>
 </body>
 </html>
