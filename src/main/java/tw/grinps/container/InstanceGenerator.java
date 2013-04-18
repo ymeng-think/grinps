@@ -29,7 +29,7 @@ class InstanceGenerator {
     private boolean canCreate(Constructor<?> constructor) {
         Class<?>[] parameterTypes = constructor.getParameterTypes();
         for (Class<?> parameterType : parameterTypes) {
-            if (!container.hasComponent(parameterType)){
+            if (!container.hasBean(parameterType)){
                 return false;
             }
         }

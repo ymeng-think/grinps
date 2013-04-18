@@ -2,11 +2,11 @@ package tw.grinps;
 
 public interface Container {
 
-    <T> T getComponent(Class<T> interfaceType);
+    <T> T getBean(Class<T> interfaceType);
 
-    void registerComponent(Class<?> interfaceType, Class<?> instanceType);
+    void registerBean(Class<?> interfaceType, Class<?> instanceType);
 
-    void registerComponent(Class<?> instanceType);
+    void registerBean(Class<?> instanceType);
 
-    boolean hasComponent(Class<?> interfaceType);
+    boolean hasBean(Class<?> interfaceType);
 }

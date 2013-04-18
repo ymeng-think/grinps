@@ -14,7 +14,7 @@ class ParameterValuesFetcher {
         Object[] parameters = new Object[parameterTypes.length];
 
         for (int i = 0; i < parameterTypes.length; i++){
-            parameters[i] = container.getComponent(parameterTypes[i]);
+            parameters[i] = container.getBean(parameterTypes[i]);
         }
 
         return parameters;
