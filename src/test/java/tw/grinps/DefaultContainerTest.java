@@ -78,4 +78,15 @@ public class DefaultContainerTest {
         assertNotSame(finder1, finder2);
     }
 
+    @Test
+    public void should_override_injected_bean_when_same_interface_is_registered_multi_times() {
+        container.registerBean(MovieFinder.class, ColonMovieFinder.class);
+        container.registerBean(MovieFinder.class, CommaMovieFinder.class);
+
+        MovieFinder finder = container.getSingletonBean(MovieFinder.class);
+
+        assertNotNull(finder);
+        assertTrue(finder instanceof CommaMovieFinder);
+    }
+
 }
