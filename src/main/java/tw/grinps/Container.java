@@ -2,7 +2,7 @@ package tw.grinps;
 
 public interface Container {
 
-    <T> T getBean(Class<T> interfaceType);
+    <T> T getSingletonBean(Class<T> interfaceType);
 
     void registerBean(Class<?> interfaceType, Class<?> instanceType);
 

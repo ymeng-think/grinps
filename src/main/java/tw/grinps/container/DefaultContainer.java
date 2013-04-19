@@ -26,7 +26,7 @@ public class DefaultContainer implements Container {
     }
 
     @Override
-    public <T> T getBean(Class<T> interfaceType) {
+    public <T> T getSingletonBean(Class<T> interfaceType) {
         return (T) this.instancePool.get(interfaceType);
     }
 

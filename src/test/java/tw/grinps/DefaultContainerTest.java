@@ -18,20 +18,20 @@ public class DefaultContainerTest {
     }
 
     @Test
-    public void should_fetch_component_created_without_parameters_from_container() {
+    public void should_fetch_bean_created_without_parameters_from_container() {
         container.registerBean(MovieFinder.class, ColonMovieFinder.class);
 
-        MovieFinder finder = container.getBean(MovieFinder.class);
+        MovieFinder finder = container.getSingletonBean(MovieFinder.class);
 
         assertTrue(finder instanceof ColonMovieFinder);
     }
 
     @Test
-    public void should_fetch_correct_component_from_container_that_contains_multi_components() {
+    public void should_fetch_bean_from_container_that_contains_multi_components() {
         container.registerBean(MovieFinder.class, ColonMovieFinder.class);
         container.registerBean(MusicFinder.class, XmlMusicFinder.class);
 
-        MovieFinder finder = container.getBean(MovieFinder.class);
+        MovieFinder finder = container.getSingletonBean(MovieFinder.class);
 
         assertTrue(finder instanceof ColonMovieFinder);
     }
@@ -41,7 +41,7 @@ public class DefaultContainerTest {
         container.registerBean(MovieFinder.class, ColonMovieFinder.class);
         container.registerBean(MovieLister.class);
 
-        MovieLister lister = container.getBean(MovieLister.class);
+        MovieLister lister = container.getSingletonBean(MovieLister.class);
 
         assertNotNull(lister);
     }
@@ -51,7 +51,7 @@ public class DefaultContainerTest {
         container.registerBean(MusicFinder.class, XmlMusicFinder.class);
         container.registerBean(MusicLister.class);
 
-        MusicLister lister = container.getBean(MusicLister.class);
+        MusicLister lister = container.getSingletonBean(MusicLister.class);
 
         assertNotNull(lister);
         assertNotNull(lister.getFinder());
