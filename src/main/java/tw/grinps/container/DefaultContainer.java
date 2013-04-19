@@ -31,6 +31,15 @@ public class DefaultContainer implements Container {
     }
 
     @Override
+    public <T> T getNewBean(Class<T> interfaceType) {
+        T singletonInstance = (T) this.instancePool.get(interfaceType);
+        Class<?> instanceType = singletonInstance.getClass();
+
+        InstanceGenerator instanceGenerator = new InstanceGenerator(this);
+        return (T) instanceGenerator.generate(instanceType);
+    }
+
+    @Override
     public boolean hasBean(Class<?> interfaceType) {
         return this.instancePool.containsKey(interfaceType);
     }

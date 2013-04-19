@@ -5,9 +5,7 @@ import org.junit.Test;
 import tw.grinps.container.DefaultContainer;
 import tw.sample.multimedia.*;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class DefaultContainerTest {
 
@@ -66,6 +64,18 @@ public class DefaultContainerTest {
         MovieFinder finder2 = container.getSingletonBean(MovieFinder.class);
 
         assertSame(finder1, finder2);
+    }
+
+    @Test
+    public void should_fetch_brand_new_bean() {
+        container.registerBean(MovieFinder.class, ColonMovieFinder.class);
+
+        MovieFinder finder1 = container.getNewBean(MovieFinder.class);
+        MovieFinder finder2 = container.getNewBean(MovieFinder.class);
+
+        assertNotNull(finder1);
+        assertNotNull(finder2);
+        assertNotSame(finder1, finder2);
     }
 
 }
