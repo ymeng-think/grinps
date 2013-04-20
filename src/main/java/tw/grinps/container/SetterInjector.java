@@ -1,6 +1,7 @@
 package tw.grinps.container;
 
 import tw.grinps.Container;
+import tw.grinps.CouldNotSetPropertyException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

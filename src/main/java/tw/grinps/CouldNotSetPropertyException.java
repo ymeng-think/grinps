@@ -1,4 +1,4 @@
-package tw.grinps.container;
+package tw.grinps;
 
 public class CouldNotSetPropertyException extends RuntimeException {
 }
