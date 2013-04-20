@@ -1,6 +1,7 @@
 package tw.grinps.container;
 
 import tw.grinps.Container;
+import tw.grinps.NotMatchedInterfaceException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,10 @@ public class DefaultContainer implements Container {
 
     @Override
     public void registerBean(Class<?> interfaceType, Class<?> instanceType) {
+        if (!isDeclaredInterface(instanceType, interfaceType)) {
+            throw new NotMatchedInterfaceException();
+        }
+
         InstanceGenerator instanceGenerator = new InstanceGenerator(this);
         Object instance = instanceGenerator.generate(instanceType);
 
@@ -42,6 +47,10 @@ public class DefaultContainer implements Container {
     @Override
     public boolean hasBean(Class<?> interfaceType) {
         return this.instancePool.containsKey(interfaceType);
+    }
+
+    private static boolean isDeclaredInterface(Class<?> instanceType, Class<?> interfaceType) {
+        return interfaceType.isAssignableFrom(instanceType);
     }
 
 }

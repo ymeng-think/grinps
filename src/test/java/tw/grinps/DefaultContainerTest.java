@@ -89,4 +89,9 @@ public class DefaultContainerTest {
         assertTrue(finder instanceof CommaMovieFinder);
     }
 
+    @Test(expected = NotMatchedInterfaceException.class)
+    public void should_throw_error_when_interface_of_injected_bean_is_not_same_as_its_declaration() {
+        container.registerBean(MusicFinder.class, ColonMovieFinder.class);
+    }
+
 }
