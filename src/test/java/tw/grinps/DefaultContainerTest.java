@@ -27,8 +27,8 @@ public class DefaultContainerTest {
 
     @Test
     public void should_fetch_bean_from_container_that_contains_multi_components() {
-        container.registerBean(MovieFinder.class, ColonMovieFinder.class);
-        container.registerBean(MusicFinder.class, XmlMusicFinder.class);
+        container.registerBean(MovieFinder.class, ColonMovieFinder.class)
+                 .registerBean(MusicFinder.class, XmlMusicFinder.class);
 
         MovieFinder finder = container.getSingletonBean(MovieFinder.class);
 
@@ -37,8 +37,8 @@ public class DefaultContainerTest {
 
     @Test
     public void should_fetch_bean_that_injected_component_in_constructor() {
-        container.registerBean(MovieFinder.class, ColonMovieFinder.class);
-        container.registerBean(MovieLister.class);
+        container.registerBean(MovieFinder.class, ColonMovieFinder.class)
+                 .registerBean(MovieLister.class);
 
         MovieLister lister = container.getSingletonBean(MovieLister.class);
 
@@ -47,8 +47,8 @@ public class DefaultContainerTest {
 
     @Test
     public void should_fetch_bean_that_injected_component_in_setter() {
-        container.registerBean(MusicFinder.class, XmlMusicFinder.class);
-        container.registerBean(MusicLister.class);
+        container.registerBean(MusicFinder.class, XmlMusicFinder.class)
+                 .registerBean(MusicLister.class);
 
         MusicLister lister = container.getSingletonBean(MusicLister.class);
 
@@ -80,8 +80,8 @@ public class DefaultContainerTest {
 
     @Test
     public void should_override_injected_bean_when_same_interface_is_registered_multi_times() {
-        container.registerBean(MovieFinder.class, ColonMovieFinder.class);
-        container.registerBean(MovieFinder.class, CommaMovieFinder.class);
+        container.registerBean(MovieFinder.class, ColonMovieFinder.class)
+                 .registerBean(MovieFinder.class, CommaMovieFinder.class);
 
         MovieFinder finder = container.getSingletonBean(MovieFinder.class);
 

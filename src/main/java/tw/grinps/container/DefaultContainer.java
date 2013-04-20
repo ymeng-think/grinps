@@ -11,7 +11,7 @@ public class DefaultContainer implements Container {
     private Map<Class<?>, Object> instancePool = new HashMap<Class<?>, Object>();
 
     @Override
-    public void registerBean(Class<?> interfaceType, Class<?> instanceType) {
+    public DefaultContainer registerBean(Class<?> interfaceType, Class<?> instanceType) {
         if (!isDeclaredInterface(instanceType, interfaceType)) {
             throw new NotMatchedInterfaceException();
         }
@@ -23,11 +23,13 @@ public class DefaultContainer implements Container {
         injector.inject(instance);
 
         this.instancePool.put(interfaceType, instance);
+
+        return this;
     }
 
     @Override
-    public void registerBean(Class<?> instanceType) {
-        registerBean(instanceType, instanceType);
+    public DefaultContainer registerBean(Class<?> instanceType) {
+        return registerBean(instanceType, instanceType);
     }
 
     @Override
