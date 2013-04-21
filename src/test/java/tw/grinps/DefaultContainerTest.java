@@ -79,6 +79,13 @@ public class DefaultContainerTest {
     }
 
     @Test
+    public void should_fetch_null_if_bean_is_NOT_registered() {
+        MovieFinder finder = container.getSingletonBean(MovieFinder.class);
+
+        assertNull(finder);
+    }
+
+    @Test
     public void should_override_injected_bean_when_same_interface_is_registered_multi_times() {
         container.registerBean(MovieFinder.class, ColonMovieFinder.class)
                  .registerBean(MovieFinder.class, CommaMovieFinder.class);
