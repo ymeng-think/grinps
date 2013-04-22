@@ -4,9 +4,7 @@ import tw.grinps.container.DefaultContainer;
 
 public interface BeanContainer {
 
-    <T> T getSingletonBean(Class<T> interfaceType);
-
-    <T> T getNewBean(Class<T> interfaceType);
+    <T> T getBean(Class<T> interfaceType, BeanFetchingType fetchingType);
 
     DefaultContainer registerBean(Class<?> interfaceType, Class<?> instanceType);
 

@@ -1,11 +1,15 @@
 package tw.grinps.container;
 
 import tw.grinps.BeanContainer;
+import tw.grinps.BeanFetchingType;
 import tw.grinps.NotMatchedInterfaceException;
 import tw.grinps.ScopedContainer;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static tw.grinps.BeanFetchingType.New;
+import static tw.grinps.BeanFetchingType.Singleton;
 
 public class DefaultContainer implements BeanContainer, ScopedContainer {
 
@@ -35,25 +39,16 @@ public class DefaultContainer implements BeanContainer, ScopedContainer {
     }
 
     @Override
-    public <T> T getSingletonBean(Class<T> interfaceType) {
-        if (hasBeanInCurrentScope(interfaceType)) {
-            return getSingletonBeanFromCurrentScope(interfaceType);
+    public <T> T getBean(Class<T> interfaceType, BeanFetchingType fetchingType) {
+        if (fetchingType == Singleton) {
+            return getSingletonBean(interfaceType);
         }
 
-        if (this.parent != null) {
-            return this.parent.getSingletonBean(interfaceType);
+        if (fetchingType == New) {
+            return getNewBean(interfaceType);
         }
 
-        return null;
-    }
-
-    @Override
-    public <T> T getNewBean(Class<T> interfaceType) {
-        T singletonInstance = getSingletonBean(interfaceType);
-        Class<?> instanceType = singletonInstance.getClass();
-
-        InstanceGenerator instanceGenerator = new InstanceGenerator(this);
-        return (T) instanceGenerator.generate(instanceType);
+        throw new IllegalArgumentException("Unknown bean fetching type");
     }
 
     @Override
@@ -87,7 +82,27 @@ public class DefaultContainer implements BeanContainer, ScopedContainer {
         return interfaceType.isAssignableFrom(instanceType);
     }
 
-    public void setParent(DefaultContainer parent) {
+    private void setParent(DefaultContainer parent) {
         this.parent = parent;
+    }
+
+    private <T> T getSingletonBean(Class<T> interfaceType) {
+        if (hasBeanInCurrentScope(interfaceType)) {
+            return getSingletonBeanFromCurrentScope(interfaceType);
+        }
+
+        if (this.parent != null) {
+            return this.parent.getSingletonBean(interfaceType);
+        }
+
+        return null;
+    }
+
+    private <T> T getNewBean(Class<T> interfaceType) {
+        T singletonInstance = getSingletonBean(interfaceType);
+        Class<?> instanceType = singletonInstance.getClass();
+
+        InstanceGenerator instanceGenerator = new InstanceGenerator(this);
+        return (T) instanceGenerator.generate(instanceType);
     }
 }

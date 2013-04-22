@@ -2,6 +2,8 @@ package tw.grinps.container;
 
 import tw.grinps.BeanContainer;
 
+import static tw.grinps.BeanFetchingType.Singleton;
+
 class ParameterValuesFetcher {
 
     private BeanContainer container;
@@ -14,7 +16,7 @@ class ParameterValuesFetcher {
         Object[] parameters = new Object[parameterTypes.length];
 
         for (int i = 0; i < parameterTypes.length; i++){
-            parameters[i] = container.getSingletonBean(parameterTypes[i]);
+            parameters[i] = container.getBean(parameterTypes[i], Singleton);
         }
 
         return parameters;

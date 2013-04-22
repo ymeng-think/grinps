@@ -4,10 +4,11 @@ import org.junit.Before;
 import org.junit.Test;
 import tw.grinps.BeanContainer;
 import tw.grinps.NotMatchedInterfaceException;
-import tw.grinps.container.DefaultContainer;
 import tw.sample.multimedia.*;
 
 import static org.junit.Assert.*;
+import static tw.grinps.BeanFetchingType.New;
+import static tw.grinps.BeanFetchingType.Singleton;
 
 public class BeanContainerTest {
 
@@ -22,7 +23,7 @@ public class BeanContainerTest {
     public void should_fetch_bean_created_without_parameters_from_container() {
         container.registerBean(MovieFinder.class, ColonMovieFinder.class);
 
-        MovieFinder finder = container.getSingletonBean(MovieFinder.class);
+        MovieFinder finder = container.getBean(MovieFinder.class, Singleton);
 
         assertTrue(finder instanceof ColonMovieFinder);
     }
@@ -32,7 +33,7 @@ public class BeanContainerTest {
         container.registerBean(MovieFinder.class, ColonMovieFinder.class)
                  .registerBean(MusicFinder.class, XmlMusicFinder.class);
 
-        MovieFinder finder = container.getSingletonBean(MovieFinder.class);
+        MovieFinder finder = container.getBean(MovieFinder.class, Singleton);
 
         assertTrue(finder instanceof ColonMovieFinder);
     }
@@ -42,7 +43,7 @@ public class BeanContainerTest {
         container.registerBean(MovieFinder.class, ColonMovieFinder.class)
                  .registerBean(MovieLister.class);
 
-        MovieLister lister = container.getSingletonBean(MovieLister.class);
+        MovieLister lister = container.getBean(MovieLister.class, Singleton);
 
         assertNotNull(lister);
     }
@@ -52,7 +53,7 @@ public class BeanContainerTest {
         container.registerBean(MusicFinder.class, XmlMusicFinder.class)
                  .registerBean(MusicLister.class);
 
-        MusicLister lister = container.getSingletonBean(MusicLister.class);
+        MusicLister lister = container.getBean(MusicLister.class, Singleton);
 
         assertNotNull(lister);
         assertNotNull(lister.getFinder());
@@ -62,8 +63,8 @@ public class BeanContainerTest {
     public void should_fetch_singleton_bean() {
         container.registerBean(MovieFinder.class, ColonMovieFinder.class);
 
-        MovieFinder finder1 = container.getSingletonBean(MovieFinder.class);
-        MovieFinder finder2 = container.getSingletonBean(MovieFinder.class);
+        MovieFinder finder1 = container.getBean(MovieFinder.class, Singleton);
+        MovieFinder finder2 = container.getBean(MovieFinder.class, Singleton);
 
         assertSame(finder1, finder2);
     }
@@ -72,8 +73,8 @@ public class BeanContainerTest {
     public void should_fetch_brand_new_bean() {
         container.registerBean(MovieFinder.class, ColonMovieFinder.class);
 
-        MovieFinder finder1 = container.getNewBean(MovieFinder.class);
-        MovieFinder finder2 = container.getNewBean(MovieFinder.class);
+        MovieFinder finder1 = container.getBean(MovieFinder.class, New);
+        MovieFinder finder2 = container.getBean(MovieFinder.class, New);
 
         assertNotNull(finder1);
         assertNotNull(finder2);
@@ -82,7 +83,7 @@ public class BeanContainerTest {
 
     @Test
     public void should_fetch_null_if_bean_is_NOT_registered() {
-        MovieFinder finder = container.getSingletonBean(MovieFinder.class);
+        MovieFinder finder = container.getBean(MovieFinder.class, Singleton);
 
         assertNull(finder);
     }
@@ -92,7 +93,7 @@ public class BeanContainerTest {
         container.registerBean(MovieFinder.class, ColonMovieFinder.class)
                  .registerBean(MovieFinder.class, CommaMovieFinder.class);
 
-        MovieFinder finder = container.getSingletonBean(MovieFinder.class);
+        MovieFinder finder = container.getBean(MovieFinder.class, Singleton);
 
         assertNotNull(finder);
         assertTrue(finder instanceof CommaMovieFinder);
