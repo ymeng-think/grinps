@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="movieLister" class="tw.sample.multimedia.MovieLister">
+
+        <!-- constructor injection using the nested <ref/> element -->
+        <constructor-arg>
+            <ref bean="colonMovieFinder"/>
+        </constructor-arg>
+
+        <!--<constructor-arg ref="yetAnotherBean"/>-->
+
+        <!--<constructor-arg type="int" value="1"/>-->
+    </bean>
+
+    <bean id="movie" class="tw.sample.multimedia.Movie"/>
+    <bean id="colonMovieFinder" class="tw.sample.multimedia.ColonMovieFinder"/>
+</beans>
+
