@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 
 public class BeanContainerTest {
 
-    private Container container;
+    private BeanContainer container;
 
     @Before
     public void setUp() throws Exception {

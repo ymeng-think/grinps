@@ -1,6 +1,6 @@
 package tw.grinps.container;
 
-import tw.grinps.Container;
+import tw.grinps.BeanContainer;
 import tw.grinps.CouldNotInitializeInstanceException;
 
 import java.lang.reflect.Constructor;
@@ -8,9 +8,9 @@ import java.lang.reflect.InvocationTargetException;
 
 class InstanceGenerator {
 
-    private Container container;
+    private BeanContainer container;
 
-    public InstanceGenerator(Container container) {
+    public InstanceGenerator(BeanContainer container) {
         this.container = container;
     }
 

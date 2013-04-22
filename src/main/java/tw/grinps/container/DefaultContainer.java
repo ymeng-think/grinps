@@ -1,12 +1,12 @@
 package tw.grinps.container;
 
-import tw.grinps.Container;
+import tw.grinps.BeanContainer;
 import tw.grinps.NotMatchedInterfaceException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class DefaultContainer implements Container {
+public class DefaultContainer implements BeanContainer {
 
     private Map<Class<?>, Object> instancePool = new HashMap<Class<?>, Object>();
 

@@ -1,6 +1,6 @@
 package tw.grinps.container;
 
-import tw.grinps.Container;
+import tw.grinps.BeanContainer;
 import tw.grinps.CouldNotSetPropertyException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -8,9 +8,9 @@ import java.lang.reflect.Method;
 
 class SetterInjector {
 
-    private Container container;
+    private BeanContainer container;
 
-    public SetterInjector(Container container) {
+    public SetterInjector(BeanContainer container) {
         this.container = container;
     }
 

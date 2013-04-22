@@ -2,7 +2,7 @@ package tw.grinps;
 
 import tw.grinps.container.DefaultContainer;
 
-public interface Container {
+public interface BeanContainer {
 
     <T> T getSingletonBean(Class<T> interfaceType);
 

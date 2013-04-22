@@ -1,12 +1,12 @@
 package tw.grinps.container;
 
-import tw.grinps.Container;
+import tw.grinps.BeanContainer;
 
 class ParameterValuesFetcher {
 
-    private Container container;
+    private BeanContainer container;
 
-    public ParameterValuesFetcher(Container container) {
+    public ParameterValuesFetcher(BeanContainer container) {
         this.container = container;
     }
 
