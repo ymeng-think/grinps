@@ -29,8 +29,18 @@ public class ScopedContainerTest {
 
         MovieFinder finder = childContainer1.getSingletonBean(MovieFinder.class);
 
-        assertNotNull(finder);
         assertTrue(childContainer1.hasBean(MovieFinder.class));
+        assertNotNull(finder);
+    }
+
+    @Test
+    public void should_fetch_bean_that_injected_component_in_constructor_which_is_registered_in_parent_scope() {
+        parentContainer.registerBean(MovieFinder.class, ColonMovieFinder.class);
+        childContainer1.registerBean(MovieLister.class);
+
+        MovieLister lister = childContainer1.getSingletonBean(MovieLister.class);
+
+        Assert.assertNotNull(lister);
     }
 
 }
