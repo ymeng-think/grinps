@@ -7,7 +7,7 @@ import tw.sample.multimedia.*;
 
 import static org.junit.Assert.*;
 
-public class DefaultContainerTest {
+public class BeanContainerTest {
 
     private Container container;
 
