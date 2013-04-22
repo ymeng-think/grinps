@@ -70,8 +70,9 @@ public class DefaultContainer implements BeanContainer, ScopedContainer {
     }
 
     @Override
-    public void addChild(ScopedContainer container) {
+    public ScopedContainer addChild(ScopedContainer container) {
         ((DefaultContainer) container).setParent(this);
+        return this;
     }
 
     private boolean hasBeanInCurrentScope(Class<?> interfaceType) {

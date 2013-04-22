@@ -9,18 +9,22 @@ import tw.sample.multimedia.MovieLister;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 public class ScopedContainerTest {
 
     private DefaultContainer parentContainer;
     private DefaultContainer childContainer1;
+    private DefaultContainer childContainer2;
 
     @Before
     public void setUp() throws Exception {
         parentContainer = new DefaultContainer();
         childContainer1 = new DefaultContainer();
+        childContainer2 = new DefaultContainer();
 
-        parentContainer.addChild(childContainer1);
+        parentContainer.addChild(childContainer1)
+                .addChild(childContainer2);
     }
 
     @Test
@@ -41,6 +45,15 @@ public class ScopedContainerTest {
         MovieLister lister = childContainer1.getSingletonBean(MovieLister.class);
 
         Assert.assertNotNull(lister);
+    }
+
+    @Test
+    public void should_NOT_fetch_bean_that_be_registered_in_brother_container() {
+        childContainer1.registerBean(MovieFinder.class, ColonMovieFinder.class);
+
+        MovieFinder finder = childContainer2.getSingletonBean(MovieFinder.class);
+
+        assertNull(finder);
     }
 
 }
