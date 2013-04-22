@@ -1,7 +1,9 @@
-package tw.grinps;
+package tw.grinps.container;
 
 import org.junit.Before;
 import org.junit.Test;
+import tw.grinps.BeanContainer;
+import tw.grinps.NotMatchedInterfaceException;
 import tw.grinps.container.DefaultContainer;
 import tw.sample.multimedia.*;
 
