@@ -15,5 +15,11 @@
 
     <bean id="movie" class="tw.sample.multimedia.Movie"/>
     <bean id="colonMovieFinder" class="tw.sample.multimedia.ColonMovieFinder"/>
+
+    <bean id="musicLister" class="tw.sample.multimedia.MusicLister">
+        <property name="finder" ref="musicFinder"/>
+    </bean>
+
+    <bean id="musicFinder" class="tw.sample.multimedia.XmlMusicFinder"/>
 </beans>
 

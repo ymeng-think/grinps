@@ -44,10 +44,12 @@ public class XMLParserTest {
     @Test
     public void should_return_multiple_bean_class_names() throws IOException {
         List<Bean> beans = beanParser.getBeansFrom("test.xml");
-        assertThat(beans.size(), is(3));
+        assertThat(beans.size(), is(5));
         assertThat(beans.get(0).getClassName(), is("tw.sample.multimedia.MovieLister"));
         assertThat(beans.get(1).getClassName(), is("tw.sample.multimedia.Movie"));
         assertThat(beans.get(2).getClassName(), is("tw.sample.multimedia.ColonMovieFinder"));
+        assertThat(beans.get(3).getClassName(), is("tw.sample.multimedia.MusicLister"));
+        assertThat(beans.get(4).getClassName(), is("tw.sample.multimedia.XmlMusicFinder"));
     }
 
     @Test
