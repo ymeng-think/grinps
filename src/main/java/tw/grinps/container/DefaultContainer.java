@@ -2,7 +2,6 @@ package tw.grinps.container;
 
 import tw.grinps.BeanContainer;
 import tw.grinps.BeanFetchingType;
-import tw.grinps.NotMatchedInterfaceException;
 import tw.grinps.ScopedContainer;
 
 import java.util.HashMap;

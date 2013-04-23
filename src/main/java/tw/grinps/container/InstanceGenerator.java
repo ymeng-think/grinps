@@ -1,7 +1,6 @@
 package tw.grinps.container;
 
 import tw.grinps.BeanContainer;
-import tw.grinps.CouldNotInitializeInstanceException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

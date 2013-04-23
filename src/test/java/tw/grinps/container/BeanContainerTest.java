@@ -3,7 +3,6 @@ package tw.grinps.container;
 import org.junit.Before;
 import org.junit.Test;
 import tw.grinps.BeanContainer;
-import tw.grinps.NotMatchedInterfaceException;
 import tw.sample.multimedia.*;
 
 import static org.junit.Assert.*;
