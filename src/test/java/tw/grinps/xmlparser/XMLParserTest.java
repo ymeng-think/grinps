@@ -49,4 +49,11 @@ public class XMLParserTest {
         assertThat(beans.get(1).getClassName(), is("tw.sample.multimedia.Movie"));
         assertThat(beans.get(2).getClassName(), is("tw.sample.multimedia.ColonMovieFinder"));
     }
+
+    @Test
+    public void should_return_a_bean_with_arguments() throws IOException {
+        List<Bean> beans = beanParser.getBeansFrom("test.xml");
+        assertThat(beans.get(0).getClassName(), is("tw.sample.multimedia.MovieLister"));
+        assertThat(beans.get(0).getArguments().get(0).getId(), is("colonMovieFinder"));
+    }
 }
