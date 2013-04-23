@@ -53,7 +53,9 @@ public class XMLParserTest {
     @Test
     public void should_return_a_bean_with_arguments() throws IOException {
         List<Bean> beans = beanParser.getBeansFrom("test.xml");
-        assertThat(beans.get(0).getClassName(), is("tw.sample.multimedia.MovieLister"));
-        assertThat(beans.get(0).getArguments().get(0).getId(), is("colonMovieFinder"));
+        Bean firstBean = beans.get(0);
+        assertThat(firstBean.getClassName(), is("tw.sample.multimedia.MovieLister"));
+        assertThat(firstBean.getArguments().get(0).getId(), is("colonMovieFinder"));
+        assertThat(firstBean.getArguments().get(1).getId(), is("movie"));
     }
 }

@@ -5,6 +5,7 @@
         <!-- constructor injection using the nested <ref/> element -->
         <constructor-arg>
             <ref bean="colonMovieFinder"/>
+            <ref bean="movie"/>
         </constructor-arg>
 
         <!--<constructor-arg ref="yetAnotherBean"/>-->
