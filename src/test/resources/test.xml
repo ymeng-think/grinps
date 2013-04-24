@@ -21,5 +21,8 @@
     </bean>
 
     <bean id="musicFinder" class="tw.sample.multimedia.XmlMusicFinder"/>
+
+    //TODO: need to add more sample classes with more than one attributes
+    //TODO: need to add the constructor and setter injection of primitive types
 </beans>
 

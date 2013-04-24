@@ -53,11 +53,19 @@ public class XMLParserTest {
     }
 
     @Test
-    public void should_return_a_bean_with_arguments() throws IOException {
+    public void should_return_a_bean_with_constructor_arguments() throws IOException {
         List<Bean> beans = beanParser.getBeansFrom("test.xml");
         Bean firstBean = beans.get(0);
         assertThat(firstBean.getClassName(), is("tw.sample.multimedia.MovieLister"));
         assertThat(firstBean.getArguments().get(0).getId(), is("colonMovieFinder"));
         assertThat(firstBean.getArguments().get(1).getId(), is("movie"));
+    }
+
+    @Test
+    public void should_return_a_bean_with_setter_arguments() throws IOException {
+        List<Bean> beans = beanParser.getBeansFrom("test.xml");
+        Bean thirdBean = beans.get(3);
+        assertThat(thirdBean.getClassName(), is("tw.sample.multimedia.MusicLister"));
+        assertThat(thirdBean.getProperties().get(0).get("finder"), is("musicFinder"));
     }
 }

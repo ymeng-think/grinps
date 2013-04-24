@@ -17,7 +17,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class XMLBeanParser {
 
@@ -55,7 +57,7 @@ public class XMLBeanParser {
 
         for (int i = 0; i < childNodes.getLength(); i++){
             Node item = childNodes.item(i);
-            if (isANodeWith(item, "bean")){
+            if (isANodeWithName(item, "bean")){
                 String className = getAttributesTextByName(item, "class");
                 String id = getAttributesTextByName(item, "id");
                 Bean newBean = new Bean(className, id);
@@ -63,9 +65,10 @@ public class XMLBeanParser {
                 newBean.setArguments(getSpecificNodes(item.getChildNodes(), new Predicate<Node>() {
                     @Override
                     public boolean apply(@Nullable Node node) {
-                        return isANodeWith(node.getParentNode(), "constructor-arg") && isANodeWith(node, "ref");
+                        return isANodeWithName(node.getParentNode(), "constructor-arg") && isANodeWithName(node, "ref");
                     }
                 }));
+                newBean.setProperties(findProperties(item.getChildNodes()));
 
                 beans.add(newBean);
             }
@@ -73,11 +76,24 @@ public class XMLBeanParser {
         return beans;
     }
 
+    private List<Map<String, String>> findProperties(NodeList nodes) {
+        List<Map<String, String>> maps = Lists.newArrayList();
+        for (int i = 0; i < nodes.getLength(); i++){
+            Node item = nodes.item(i);
+            if (isANodeWithName(item, "property")){
+                HashMap<String, String> aMap = new HashMap<String, String>();
+                aMap.put(getAttributesTextByName(item, "name"), getAttributesTextByName(item, "ref"));
+                maps.add(aMap);
+            }
+        }
+        return maps;
+    }
+
     private String getAttributesTextByName(Node item, String attributeName) {
         return item.getAttributes().getNamedItem(attributeName).getTextContent();
     }
 
-    private boolean isANodeWith(Node item, String nodeName) {
+    private boolean isANodeWithName(Node item, String nodeName) {
         return item.getNodeName().equals(nodeName);
     }
 
