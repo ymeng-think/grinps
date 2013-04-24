@@ -21,20 +21,16 @@ public class DefaultContainer implements BeanContainer, ScopedContainer {
             throw new NotMatchedInterfaceException();
         }
 
-        InstanceGenerator instanceGenerator = new InstanceGenerator(this);
-        Object instance = instanceGenerator.generate(instanceType);
-
-        SetterInjector injector = new SetterInjector(this);
-        injector.inject(instance);
-
-        this.instancePool.put(interfaceType, instance);
+        registerBeanAs(createInstance(instanceType), interfaceType);
 
         return this;
     }
 
     @Override
     public DefaultContainer registerBean(Class<?> instanceType) {
-        return registerBean(instanceType, instanceType);
+        registerBeanAs(createInstance(instanceType), null);
+
+        return this;
     }
 
     @Override
@@ -67,6 +63,40 @@ public class DefaultContainer implements BeanContainer, ScopedContainer {
     public ScopedContainer addChild(ScopedContainer container) {
         ((DefaultContainer) container).setParent(this);
         return this;
+    }
+
+    private Object createInstance(Class<?> instanceType) {
+        InstanceGenerator instanceGenerator = new InstanceGenerator(this);
+        Object instance = instanceGenerator.generate(instanceType);
+
+        SetterInjector injector = new SetterInjector(this);
+        injector.inject(instance);
+
+        return instance;
+    }
+
+    private void registerBeanAs(Object instance, Class<?> interfaceType) {
+        if (interfaceType != null) {
+            this.instancePool.put(interfaceType, instance);
+        } else {
+            registerBeanInHierarchy(instance);
+        }
+    }
+
+    private void registerBeanInHierarchy(Object obj) {
+        registerBeanSelf(obj);
+        registerBeanWithAllInterfaces(obj);
+    }
+
+    private void registerBeanWithAllInterfaces(Object obj) {
+        Class<?>[] interfaces = obj.getClass().getInterfaces();
+        for (Class<?> parentInterface : interfaces) {
+            this.instancePool.put(parentInterface, obj);
+        }
+    }
+
+    private void registerBeanSelf(Object obj) {
+        this.instancePool.put(obj.getClass(), obj);
     }
 
     private boolean hasBeanInCurrentScope(Class<?> interfaceType) {

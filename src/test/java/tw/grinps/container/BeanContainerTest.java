@@ -103,4 +103,15 @@ public class BeanContainerTest {
         container.registerBean(MusicFinder.class, ColonMovieFinder.class);
     }
 
+    @Test
+    public void should_fetch_bean_with_auto_interface_identification() {
+        container.registerBean(ColonMovieFinder.class);
+
+        MovieFinder finder1 = container.getBean(MovieFinder.class, Singleton);
+        MovieFinder finder2 = container.getBean(ColonMovieFinder.class, Singleton);
+
+        assertTrue(finder1 instanceof ColonMovieFinder);
+        assertSame(finder1, finder2);
+    }
+
 }
