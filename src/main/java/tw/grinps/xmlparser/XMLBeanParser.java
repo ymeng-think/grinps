@@ -1,8 +1,10 @@
 package tw.grinps.xmlparser;
 
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
+import com.sun.istack.internal.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -31,10 +33,26 @@ public class XMLBeanParser {
         return null;
     }
 
+    private List<Bean> getSpecificNodes(NodeList nodeList, Predicate<Node> isASpecificNode){
+        List<Bean> beans = Lists.newArrayList();
+        for (int i = 0; i < nodeList.getLength(); i++){
+            Node item = nodeList.item(i);
+            if (item.hasChildNodes()){
+                return getSpecificNodes(item.getChildNodes(), isASpecificNode);
+            }
+
+            if (isASpecificNode.apply(item)){
+                beans.add(new Bean(getAttributesTextByName(item, "bean")));
+            }
+        }
+        return beans;
+    }
+
     private List<Bean> findBeans(Document doc) {
         List<Bean> beans = Lists.newArrayList();
-        Element bean = doc.getDocumentElement();
-        NodeList childNodes = bean.getChildNodes();
+        Element beansEle = doc.getDocumentElement();
+        NodeList childNodes = beansEle.getChildNodes();
+
         for (int i = 0; i < childNodes.getLength(); i++){
             Node item = childNodes.item(i);
             if (isANodeWith(item, "bean")){
@@ -42,29 +60,14 @@ public class XMLBeanParser {
                 String id = getAttributesTextByName(item, "id");
                 Bean newBean = new Bean(className, id);
 
-                newBean.setArguments(setBeanConstructorArguments(item));
+                newBean.setArguments(getSpecificNodes(item.getChildNodes(), new Predicate<Node>() {
+                    @Override
+                    public boolean apply(@Nullable Node node) {
+                        return isANodeWith(node.getParentNode(), "constructor-arg") && isANodeWith(node, "ref");
+                    }
+                }));
 
                 beans.add(newBean);
-            }
-        }
-        return beans;
-    }
-
-    private List<Bean> setBeanConstructorArguments(Node item) {
-        List<Bean> beans = Lists.newArrayList();
-        if(item.hasChildNodes()){
-            NodeList childs = item.getChildNodes();
-            for (int j = 0; j < childs.getLength(); j++){
-                Node childItem = childs.item(j);
-                if (isANodeWith(childItem, "constructor-arg")){
-                    NodeList refs = childItem.getChildNodes();
-                    for (int k = 0; k < refs.getLength(); k++){
-                        Node ref = refs.item(k);
-                        if (isANodeWith(ref, "ref")){
-                            beans.add(new Bean(getAttributesTextByName(ref, "bean")));
-                        }
-                    }
-                }
             }
         }
         return beans;
