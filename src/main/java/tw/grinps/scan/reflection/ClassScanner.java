@@ -5,17 +5,17 @@ import java.util.List;
 
 import static java.text.MessageFormat.format;
 
-public class Reflection {
+public class ClassScanner {
 
     private String namespace;
 
-    public Reflection(String namespace) {
+    public ClassScanner(String namespace) {
         this.namespace = namespace;
     }
 
     public List<Class<?>> allClasses() {
         ClassFileScanner classFileScanner = new ClassFileScanner(namespace);
-        String[] classFullNames = classFileScanner.getAllClassFullNames();
+        String[] classFullNames = classFileScanner.allClassFullNames();
 
         List<Class<?>> classes = new ArrayList<Class<?>>();
         for (String fullName : classFullNames) {

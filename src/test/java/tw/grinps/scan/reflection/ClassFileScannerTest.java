@@ -3,8 +3,6 @@ package tw.grinps.scan.reflection;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 
 public class ClassFileScannerTest {
@@ -18,7 +16,7 @@ public class ClassFileScannerTest {
 
     @Test
     public void should_get_all_files_in_namespace() {
-        String[] classFullNames = scanner.getAllClassFullNames();
+        String[] classFullNames = scanner.allClassFullNames();
 
         assertEquals(2, classFullNames.length);
         assertEquals("tw.sample.soldier.Cavalry", classFullNames[0]);

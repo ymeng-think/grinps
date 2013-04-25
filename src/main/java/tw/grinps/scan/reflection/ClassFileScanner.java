@@ -18,7 +18,7 @@ public class ClassFileScanner {
         this.baseNamespace = baseNamespace;
     }
 
-    public String[] getAllClassFullNames() {
+    public String[] allClassFullNames() {
         File codeFolder = getSampleCodeFolder();
         File[] classFiles = getClassFiles(codeFolder, baseNamespace);
         return extractClassFileInfos(classFiles);
