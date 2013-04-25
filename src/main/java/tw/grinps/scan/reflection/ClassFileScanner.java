@@ -3,6 +3,7 @@ package tw.grinps.scan.reflection;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,19 +18,29 @@ public class ClassFileScanner {
         this.baseNamespace = baseNamespace;
     }
 
-    public List<ClassInfo> allClassFiles() {
+    public String[] getAllClassFullNames() {
         File codeFolder = getSampleCodeFolder();
         File[] classFiles = getClassFiles(codeFolder, baseNamespace);
         return extractClassFileInfos(classFiles);
     }
 
-    private List<ClassInfo> extractClassFileInfos(File[] classFiles) {
-        List<ClassInfo> classes = new ArrayList<ClassInfo>();
+    private String[] extractClassFileInfos(File[] classFiles) {
+        List<String> classes = new ArrayList<String>();
         for (File classFile : classFiles) {
-            classes.add(new ClassInfo());
+            classes.add(getClassFullName(baseNamespace, classFile.getName()));
         }
 
-        return classes;
+        return classes.toArray(new String[0]);
+    }
+
+    private String getClassFullName(String baseNamespace, String fileName) {
+        String fileNameWithoutExt = removeExtension(fileName);
+        return format("{0}.{1}", baseNamespace, fileNameWithoutExt);
+    }
+
+    private String removeExtension(String fileName) {
+        int dotSeparator = fileName.lastIndexOf('.');
+        return fileName.substring(0, dotSeparator);
     }
 
     private File[] getClassFiles(File baseFolder, String baseNamespace) {

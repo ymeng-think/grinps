@@ -18,8 +18,10 @@ public class ClassFileScannerTest {
 
     @Test
     public void should_get_all_files_in_namespace() {
-        List<ClassInfo> classInfos = scanner.allClassFiles();
+        String[] classFullNames = scanner.getAllClassFullNames();
 
-        assertEquals(2, classInfos.size());
+        assertEquals(2, classFullNames.length);
+        assertEquals("tw.sample.soldier.Cavalry", classFullNames[0]);
+        assertEquals("tw.sample.soldier.Infantry", classFullNames[1]);
     }
 }
