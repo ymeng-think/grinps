@@ -5,7 +5,7 @@ import java.util.List;
 
 import static java.text.MessageFormat.format;
 
-public class ClassScanner {
+public class ClassScanner implements TypeScanner {
 
     private String namespace;
 
@@ -13,6 +13,7 @@ public class ClassScanner {
         this.namespace = namespace;
     }
 
+    @Override
     public List<Class<?>> allClasses() {
         ClassFileScanner classFileScanner = new ClassFileScanner(namespace);
         String[] classFullNames = classFileScanner.allClassFullNames();
