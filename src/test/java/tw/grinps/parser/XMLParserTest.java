@@ -1,4 +1,4 @@
-package tw.grinps.xmlparser;
+package tw.grinps.parser;
 
 import org.junit.Before;
 import org.junit.Test;

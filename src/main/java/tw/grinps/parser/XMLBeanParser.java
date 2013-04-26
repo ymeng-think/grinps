@@ -1,4 +1,4 @@
-package tw.grinps.xmlparser;
+package tw.grinps.parser;
 
 
 import com.google.common.base.Predicate;
